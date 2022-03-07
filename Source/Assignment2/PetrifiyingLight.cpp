@@ -13,9 +13,7 @@ APetrifiyingLight::APetrifiyingLight()
 	spotlight = CreateDefaultSubobject<USpotLightComponent>(TEXT("SpotLight"));
 	RootComponent = spotlight;
 
-	// Test
 	proceduralMesh = CreateDefaultSubobject<UProceduralConeMesh>(TEXT("ProceduralMesh"));
-	//proceduralMesh->material = lightConeMaterial;
 
 	rotationCurve = CreateDefaultSubobject<UCurveFloat>(TEXT("RotationCurve"));
 	movementCurve = CreateDefaultSubobject<UCurveFloat>(TEXT("MovementCurve"));
@@ -28,10 +26,6 @@ void APetrifiyingLight::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//lightCone->SetCollisionProfileName(TEXT("Trigger"));
-	//lightCone->SetCollisionResponseToAllChannels(ECR_Ignore);
-	//lightCone->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-
 	RotationBegin();
 	MovementBegin();
 	BlinkingBegin();
@@ -130,7 +124,7 @@ void APetrifiyingLight::UpdateBlinkingTimeline(float output)
 	}
 	else
 	{
-		//lightCone->SetVisibility(true);
+		//proceduralMesh->set(true);
 		spotlight->SetVisibility(true);
 	}
 }

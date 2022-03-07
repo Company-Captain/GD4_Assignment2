@@ -16,9 +16,9 @@ class ASSIGNMENT2_API UProceduralConeMesh : public UActorComponent
 	UPROPERTY(EditAnywhere)
 	int numberOfRays;
 	UPROPERTY(EditAnywhere)
-	int innerRadius;
+	float innerRadius;
 	UPROPERTY(EditAnywhere)
-	int outerRadius;
+	float outerRadius;
 	UPROPERTY(EditAnywhere)
 	int length;
 

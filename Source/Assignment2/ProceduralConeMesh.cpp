@@ -9,16 +9,10 @@
 // Sets default values for this component's properties
 UProceduralConeMesh::UProceduralConeMesh()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	//numberOfRays = 16;
-	//innerRadius = 25;
-	//outerRadius = 100;
-	//length = 100;
-
 	mesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("ProceduralMeshComponent"));
+	//mesh->bUseComplexAsSimpleCollision = true;
 }
 
 
@@ -27,13 +21,10 @@ void UProceduralConeMesh::BeginPlay()
 {
 	Super::BeginPlay();
 
-
 	FVector parentLocation = GetOwner()->GetActorLocation();
 	FVector actorForward = GetOwner()->GetActorForwardVector();
 	FVector actorRight = GetOwner()->GetActorRightVector();
 	FVector actorUp = GetOwner()->GetActorUpVector();
-
-	FRotator temp = FRotator(-90, 0, 0);
 
 	float angle = 0;
 	for (int i = 0; i < numberOfRays; i++)
@@ -54,7 +45,7 @@ void UProceduralConeMesh::BeginPlay()
 		else vertices.Add(rayEnd);
 	}
 
-	for (int i = 0; i < vertices.Num(); i++)
+	for (int i = 0; i < vertices.Num() - 2; i++)
 	{
 		triangles.Add(i);
 		triangles.Add(i+1);
@@ -63,14 +54,37 @@ void UProceduralConeMesh::BeginPlay()
 		triangles.Add(i+2);
 		triangles.Add(i+1);
 		triangles.Add(i+3);
-
-		/*UVs.Add(FVector2D(0, 0));
-		UVs.Add(FVector2D(0, 1));
-		UVs.Add(FVector2D(1, 0));
-		UVs.Add(FVector2D(1, 1));*/
 	}
+	int lastVertex = vertices.Num() - 1;
+
+	triangles.Add(lastVertex);
+	triangles.Add(lastVertex - 1);
+	triangles.Add(0);
+
+	triangles.Add(lastVertex - 1);
+	triangles.Add(lastVertex);
+	triangles.Add(0);
+
+	triangles.Add(0);
+	triangles.Add(lastVertex);
+	triangles.Add(1);
+
+	triangles.Add(lastVertex);
+	triangles.Add(0);
+	triangles.Add(1);
+
+	triangles.Add(1);
+	triangles.Add(0);
+	triangles.Add(2);
+
+
 	mesh->CreateMeshSection(0, vertices, triangles, TArray<FVector>(), TArray<FVector2D>(), TArray<FColor>(), TArray<FProcMeshTangent>(), true);
 	mesh->SetMaterial(0, material);
+
+	mesh->SetCollisionProfileName(TEXT("Trigger"));
+	mesh->SetCollisionResponseToAllChannels(ECR_Ignore);
+	mesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	mesh->bUseComplexAsSimpleCollision = true;
 }
 
 
@@ -84,9 +98,8 @@ void UProceduralConeMesh::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	FVector actorRight = GetOwner()->GetActorRightVector();
 	FVector actorUp = GetOwner()->GetActorUpVector();
 
-	FRotator temp = FRotator(-90, 0, 0);
-
 	float angle = 0;
+	int vertexIndex = 0;
 	for (int i = 0; i < numberOfRays; i++)
 	{
 		float x = FMath::Sin(angle);
@@ -98,12 +111,14 @@ void UProceduralConeMesh::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 		FHitResult outHit;
 		bool isHit = GetWorld()->LineTraceSingleByObjectType(outHit, rayStart, rayEnd, ECC_WorldStatic);
-		//DrawDebugLine(GetWorld(), rayStart, rayEnd, FColor::Green, false, 1, 0, 1);
+		//DrawDebugLine(GetWorld(), rayStart, rayEnd, FColor::Green, false, 0.001 , 0, 1);
 
-
-
-
-		//mesh->CreateMeshSection()
+		vertices[vertexIndex] = rayStart;
+		if (isHit) vertices[vertexIndex + 1] = outHit.ImpactPoint;
+		else vertices[vertexIndex + 1] = rayEnd;
+		
+		vertexIndex += 2;
 	}
+	mesh->UpdateMeshSection(0, vertices, TArray<FVector>(), TArray<FVector2D>(), TArray<FColor>(), TArray<FProcMeshTangent>());
 }
 
