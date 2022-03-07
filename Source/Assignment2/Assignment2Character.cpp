@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "PetrifiyingLight.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAssignment2Character
@@ -15,7 +16,10 @@
 AAssignment2Character::AAssignment2Character()
 {
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	UCapsuleComponent* capsule = GetCapsuleComponent();
+	capsule->InitCapsuleSize(42.f, 96.0f);
+	capsule->OnComponentBeginOverlap.AddDynamic(this, &AAssignment2Character::OnOverlapBegin);
+	
 
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
@@ -74,6 +78,17 @@ void AAssignment2Character::SetupPlayerInputComponent(class UInputComponent* Pla
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AAssignment2Character::OnResetVR);
+}
+
+void AAssignment2Character::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	APetrifiyingLight* light = Cast<APetrifiyingLight>(OtherActor);
+	if (light)
+	{
+		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+		DisableInput(PlayerController);
+		GEngine->AddOnScreenDebugMessage(-1, 12.f, FColor::White, TEXT("You're petrified"));
+	}
 }
 
 
