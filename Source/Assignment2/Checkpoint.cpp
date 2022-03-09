@@ -39,7 +39,7 @@ void ACheckpoint::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	{
 		AGameModeBase* gm = GetWorld()->GetAuthGameMode();
 		AAssignment2GameMode* cgm = Cast<AAssignment2GameMode>(gm);
-		//cgm->respawnPoint = player->GetTransform();
+		cgm->respawnPoint = player->GetTransform();
 	}
 }
 

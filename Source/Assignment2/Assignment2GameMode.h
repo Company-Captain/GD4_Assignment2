@@ -33,8 +33,8 @@ protected:
     UPROPERTY()
         FOnPlayerDiedSignature OnPlayerDied;
 
-//public:
-//    FTransform respawnPoint;
+public:
+    FTransform respawnPoint;
 };
 
 
