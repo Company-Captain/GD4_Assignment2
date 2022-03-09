@@ -9,6 +9,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "PetrifiyingLight.h"
+#include "Assignment2GameMode.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AAssignment2Character
@@ -91,6 +92,7 @@ void AAssignment2Character::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, 
 		GetMesh()->SetMaterial(1, material);
 		GetMesh()->bPauseAnims = true;
 		GEngine->AddOnScreenDebugMessage(-1, 12.f, FColor::White, TEXT("You're petrified"));
+		GetWorld()->GetTimerManager().SetTimer(deathTimer, this, &AAssignment2Character::CallRestartPlayer, 2, false);
 	}
 }
 
@@ -154,5 +156,37 @@ void AAssignment2Character::MoveRight(float Value)
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
+	}
+}
+
+void AAssignment2Character::Destroyed()
+{
+	Super::Destroyed();
+
+	// Example to bind to OnPlayerDied event in GameMode. 
+	if (UWorld* World = GetWorld())
+	{
+		if (AAssignment2GameMode* GameMode = Cast<AAssignment2GameMode>(World->GetAuthGameMode()))
+		{
+			GameMode->GetOnPlayerDied().Broadcast(this);
+		}
+	}
+}
+
+void AAssignment2Character::CallRestartPlayer()
+{
+	//Get a reference to the Pawn Controller.
+	AController* CortollerRef = GetController();
+
+	//Destroy the Player.   
+	Destroy();
+
+	//Get the World and GameMode in the world to invoke its restart player function.
+	if (UWorld* World = GetWorld())
+	{
+		if (AAssignment2GameMode* GameMode = Cast<AAssignment2GameMode>(World->GetAuthGameMode()))
+		{
+			GameMode->RestartPlayer(CortollerRef);
+		}
 	}
 }

@@ -76,5 +76,16 @@ private:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stone Material")
 	UMaterialInterface* material;
+
+protected:
+
+	//Called when our Actor is destroyed during Gameplay.
+	virtual void Destroyed();
+
+	//Call Gamemode class to Restart Player Character.
+	void CallRestartPlayer();
+
+private:
+	FTimerHandle deathTimer;
 };
 
