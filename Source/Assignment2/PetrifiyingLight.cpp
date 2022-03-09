@@ -119,13 +119,13 @@ void APetrifiyingLight::UpdateBlinkingTimeline(float output)
 {
 	if (output < 1)
 	{
-		//lightCone->SetVisibility(false);
-		spotlight->SetVisibility(false);
+		SetActorHiddenInGame(true);
+		SetActorEnableCollision(false);
 	}
 	else
 	{
-		//proceduralMesh->set(true);
-		spotlight->SetVisibility(true);
+		SetActorHiddenInGame(false);
+		SetActorEnableCollision(true);
 	}
 }
 

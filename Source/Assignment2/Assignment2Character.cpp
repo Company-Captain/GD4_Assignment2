@@ -87,6 +87,9 @@ void AAssignment2Character::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, 
 	{
 		APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 		DisableInput(PlayerController);
+		GetMesh()->SetMaterial(0, material);
+		GetMesh()->SetMaterial(1, material);
+		GetMesh()->bPauseAnims = true;
 		GEngine->AddOnScreenDebugMessage(-1, 12.f, FColor::White, TEXT("You're petrified"));
 	}
 }
