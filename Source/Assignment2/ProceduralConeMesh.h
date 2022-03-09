@@ -14,13 +14,13 @@ class ASSIGNMENT2_API UProceduralConeMesh : public UActorComponent
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere)
-	int numberOfRays;
+	int numberOfRays = 16;
 	UPROPERTY(EditAnywhere)
-	float innerRadius;
+	float innerRadius = 1;
 	UPROPERTY(EditAnywhere)
-	float outerRadius;
+	float outerRadius = 100;
 	UPROPERTY(EditAnywhere)
-	int length;
+	int length = 200;
 
 	TArray<FVector> vertices;
 	TArray<int> triangles;

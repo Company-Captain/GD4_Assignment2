@@ -24,11 +24,17 @@ void AAssignment2GameMode::BeginPlay()
         OnPlayerDied.AddDynamic(this, &AAssignment2GameMode::PlayerDied);
     }
 
+    //AController* playerController = Cast<AController>(GetWorld()->GetFirstPlayerController());
+    //AActor* StartSpot = FindPlayerStart(playerController);
+    //FTransform startTransform = StartSpot->GetTransform();
+    //respawnPoint = startTransform;
+
 }
 
 void AAssignment2GameMode::RestartPlayer(AController* NewPlayer)
 {
-    Super::RestartPlayer(NewPlayer);
+    //Super::RestartPlayer(NewPlayer);
+    //Super::RestartPlayerAtTransform(NewPlayer, respawnPoint);
 }
 
 void AAssignment2GameMode::PlayerDied(ACharacter* Character)
