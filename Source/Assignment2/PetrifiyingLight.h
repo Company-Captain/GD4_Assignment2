@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "Components/SpotLightComponent.h"
 #include "Components/TimelineComponent.h"
-#include "ProceduralConeMesh.h"
 #include "PetrifiyingLight.generated.h"
 
 UENUM()
@@ -31,9 +30,9 @@ class ASSIGNMENT2_API APetrifiyingLight : public AActor
 	GENERATED_BODY()
 
 		// Test
-public:		
+public:
 	UPROPERTY(EditAnywhere, Category = "Visuals")
-		UProceduralConeMesh* proceduralMesh;
+		class UStaticMeshComponent* lightCone;
 
 	UPROPERTY(EditAnywhere, Category = "Visuals")
 		class USpotLightComponent* spotlight;
