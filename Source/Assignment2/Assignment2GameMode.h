@@ -32,6 +32,9 @@ protected:
     //Signature to bind delegate. 
     UPROPERTY()
         FOnPlayerDiedSignature OnPlayerDied;
+
+public:
+    FTransform respawnPoint;
 };
 
 
