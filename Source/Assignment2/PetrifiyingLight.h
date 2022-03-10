@@ -31,7 +31,7 @@ class ASSIGNMENT2_API APetrifiyingLight : public AActor
 	GENERATED_BODY()
 
 		// Test
-public:
+public:		
 	UPROPERTY(EditAnywhere, Category = "Visuals")
 		UProceduralConeMesh* proceduralMesh;
 
