@@ -13,3 +13,45 @@ AAssignment2GameMode::AAssignment2GameMode()
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 }
+
+void AAssignment2GameMode::BeginPlay()
+{
+    Super::BeginPlay();
+
+    //Bind our Player died delegate to the Gamemode's PlayerDied function.
+    if (!OnPlayerDied.IsBound())
+    {
+        OnPlayerDied.AddDynamic(this, &AAssignment2GameMode::PlayerDied);
+    }
+}
+
+void AAssignment2GameMode::RestartPlayer(AController* NewPlayer)
+{
+	if (NewPlayer == nullptr || NewPlayer->IsPendingKillPending())
+	{
+		return;
+	}
+
+	AActor* StartSpot = FindPlayerStart(NewPlayer);
+
+	// If a start spot wasn't found,
+	if (StartSpot == nullptr)
+	{
+		// Check for a previously assigned spot
+		if (NewPlayer->StartSpot != nullptr)
+		{
+			StartSpot = NewPlayer->StartSpot.Get();
+			UE_LOG(LogGameMode, Warning, TEXT("RestartPlayer: Player start not found, using last start spot"));
+		}
+	}
+	if (respawnPoint.GetLocation() == FVector(0,0,0)) respawnPoint = StartSpot->GetTransform();
+
+    Super::RestartPlayerAtTransform(NewPlayer, respawnPoint);
+}
+
+void AAssignment2GameMode::PlayerDied(ACharacter* Character)
+{
+    //Get a reference to our Character's Player Controller
+    AController* CharacterController = Character->GetController();
+    RestartPlayer(CharacterController);
+}

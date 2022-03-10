@@ -13,6 +13,7 @@ UProceduralConeMesh::UProceduralConeMesh()
 
 	mesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("ProceduralMeshComponent"));
 	//mesh->bUseComplexAsSimpleCollision = true;
+	//test
 }
 
 
