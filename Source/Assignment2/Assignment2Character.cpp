@@ -20,7 +20,6 @@ AAssignment2Character::AAssignment2Character()
 	UCapsuleComponent* capsule = GetCapsuleComponent();
 	capsule->InitCapsuleSize(42.f, 96.0f);
 	capsule->OnComponentBeginOverlap.AddDynamic(this, &AAssignment2Character::OnOverlapBegin);
-	capsule->OnComponentEndOverlap.AddDynamic(this, &AAssignment2Character::OnOverlapEnd);
 	
 
 	// set our turn rates for input
@@ -49,8 +48,6 @@ AAssignment2Character::AAssignment2Character()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-
-	currentDisableLightButton = NULL;
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
@@ -62,8 +59,6 @@ void AAssignment2Character::SetupPlayerInputComponent(class UInputComponent* Pla
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Interact2", IE_Pressed, this, &AAssignment2Character::OnInteract);
-
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
@@ -99,23 +94,6 @@ void AAssignment2Character::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, 
 		GEngine->AddOnScreenDebugMessage(-1, 12.f, FColor::White, TEXT("You're petrified"));
 		GetWorld()->GetTimerManager().SetTimer(deathTimer, this, &AAssignment2Character::CallRestartPlayer, 2, false);
 	}
-
-	UDisableLight* disableLightButton = Cast<UDisableLight>(OtherActor->GetComponentByClass(UDisableLight::StaticClass()));
-	if (disableLightButton)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 12.f, FColor::White, TEXT("Overlap with Disable Light button"));
-		currentDisableLightButton = Cast<UDisableLight>(OtherActor->GetComponentByClass(UDisableLight::StaticClass()));
-	}
-}
-
-
-void AAssignment2Character::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	UDisableLight* disableLightButton = Cast<UDisableLight>(OtherActor);
-	if (disableLightButton)
-	{
-		currentDisableLightButton = NULL;
-	}
 }
 
 
@@ -138,15 +116,6 @@ void AAssignment2Character::TouchStarted(ETouchIndex::Type FingerIndex, FVector 
 void AAssignment2Character::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
 {
 		StopJumping();
-}
-
-void AAssignment2Character::OnInteract()
-{
-	if (currentDisableLightButton)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 12.f, FColor::White, TEXT("Calling Disable Light"));
-		currentDisableLightButton->DisableLight();
-	}
 }
 
 void AAssignment2Character::TurnAtRate(float Rate)

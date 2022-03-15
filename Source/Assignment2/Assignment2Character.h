@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "DisableLight.h"
 #include "Assignment2Character.generated.h"
 
 UCLASS(config=Game)
@@ -59,8 +58,6 @@ protected:
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
-	void OnInteract();
-
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -75,7 +72,6 @@ public:
 private:
 	UFUNCTION()
 	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stone Material")
@@ -91,6 +87,5 @@ protected:
 
 private:
 	FTimerHandle deathTimer;
-	UDisableLight* currentDisableLightButton;
 };
 
