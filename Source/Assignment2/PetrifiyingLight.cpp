@@ -26,6 +26,11 @@ void APetrifiyingLight::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (enableRotation == false && enableMovement == false)
+	{
+		proceduralMesh->SetComponentTickEnabled(false);
+	}
+
 	RotationBegin();
 	MovementBegin();
 	BlinkingBegin();

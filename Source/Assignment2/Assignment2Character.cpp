@@ -96,14 +96,12 @@ void AAssignment2Character::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, 
 		GetMesh()->SetMaterial(0, material);
 		GetMesh()->SetMaterial(1, material);
 		GetMesh()->bPauseAnims = true;
-		GEngine->AddOnScreenDebugMessage(-1, 12.f, FColor::White, TEXT("You're petrified"));
 		GetWorld()->GetTimerManager().SetTimer(deathTimer, this, &AAssignment2Character::CallRestartPlayer, 2, false);
 	}
 
 	UDisableLight* disableLightButton = Cast<UDisableLight>(OtherActor->GetComponentByClass(UDisableLight::StaticClass()));
 	if (disableLightButton)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 12.f, FColor::White, TEXT("Overlap with Disable Light button"));
 		currentDisableLightButton = Cast<UDisableLight>(OtherActor->GetComponentByClass(UDisableLight::StaticClass()));
 	}
 }
@@ -111,8 +109,8 @@ void AAssignment2Character::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, 
 
 void AAssignment2Character::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	UDisableLight* disableLightButton = Cast<UDisableLight>(OtherActor);
-	if (disableLightButton)
+	//UDisableLight* disableLightButton = Cast<UDisableLight>(OtherActor);
+	if (currentDisableLightButton != NULL)
 	{
 		currentDisableLightButton = NULL;
 	}
@@ -144,7 +142,7 @@ void AAssignment2Character::OnInteract()
 {
 	if (currentDisableLightButton)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 12.f, FColor::White, TEXT("Calling Disable Light"));
+		GEngine->AddOnScreenDebugMessage(-1, 12.f, FColor::White, TEXT("Interacted with light switch"));
 		currentDisableLightButton->DisableLight();
 	}
 }
