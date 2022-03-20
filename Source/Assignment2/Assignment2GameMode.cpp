@@ -45,6 +45,9 @@ void AAssignment2GameMode::RestartPlayer(AController* NewPlayer)
 		}
 	}
 	if (respawnPoint.GetLocation() == FVector(0,0,0)) respawnPoint = StartSpot->GetTransform();
+	FVector rpLoc = respawnPoint.GetLocation();
+	FVector bandaid = FVector(rpLoc.X, rpLoc.Y, rpLoc.Z + 20.0f);
+	respawnPoint.SetLocation(bandaid);
 
     Super::RestartPlayerAtTransform(NewPlayer, respawnPoint);
 }
